@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image,StatusBar  } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 interface HeaderProps {
@@ -10,7 +10,9 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ title, onLeftPress, onRightPress }) => {
   return (
-    <LinearGradient colors={['#007BFF', '#00008B']} style={styles.container}>
+    <>
+     <StatusBar backgroundColor="#00008B" barStyle="light-content" />
+    <LinearGradient colors={['#1A84B8', '#1A84B8']} style={styles.container}>
       <TouchableOpacity onPress={onLeftPress}>
         <Image
           source={require('../assets/images/phonee.png')} // Update path to your image
@@ -23,12 +25,13 @@ const Header: React.FC<HeaderProps> = ({ title, onLeftPress, onRightPress }) => 
 
       <TouchableOpacity onPress={onRightPress}>
         <Image
-          source={require('../assets/images/emaill.png')}
+          source={require('../assets/images/whitemesageicon.png')}
            style={styles.icon} // Update path to your image          style={styles.icon}
           resizeMode="contain"
         />
       </TouchableOpacity>
     </LinearGradient>
+    </>
   );
 };
 
@@ -41,7 +44,8 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     // alignItems: 'center',
     justifyContent: 'space-between',
-    width:'100%'
+    width:'100%',
+    marginTop:20
   },
   title: {
     color: 'white',

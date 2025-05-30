@@ -14,32 +14,44 @@ export default function TabNavigator() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: 'white',
-          paddingBottom: 5,
-          height: 60,
+         backgroundColor: 'lightgray',
+  position: 'absolute',
+  bottom: 0, // moves it slightly above the screen bottom
+  left: 10,
+  right: 10,
+  borderTopLeftRadius: 0,
+  borderTopRightRadius: 0,
+  height: 70,
+  elevation: 5, // for Android shadow
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 4,
         },
         tabBarLabelStyle: {
           fontSize: 12,
         },
+         tabBarActiveTintColor: 'orange',
+  tabBarInactiveTintColor: 'gray',
         tabBarIcon: ({ focused }) => {
           let iconSource;
 
          if (route.name === 'Home') {
             iconSource = focused
               ? require('../assets/images/homeorange.png')
-              : require('../assets/images/homewhite.png');
+              : require('../assets/images/homegray.png');
           } else if (route.name === 'Messages') {
             iconSource = focused
-              ? require('../assets/images/orangemesage.png')
-              : require('../assets/images/whitemesage.png');
+              ? require('../assets/images/messageorange.png')
+              : require('../assets/images/messagegray.png');
           } else if (route.name === 'Social') {
             iconSource = focused
-              ? require('../assets/images/socialorange.png')
-              : require('../assets/images/socialwhite.png');
+              ? require('../assets/images/socialyellow.png')
+              : require('../assets/images/socialgray.png');
           } else if (route.name === 'Profile') {
             iconSource = focused
               ? require('../assets/images/profileorange.png')
-              : require('../assets/images/profilewhite.png');
+              : require('../assets/images/profilegray.png');
           }
 
           return (

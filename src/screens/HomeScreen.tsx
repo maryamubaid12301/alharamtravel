@@ -54,24 +54,52 @@ useEffect(() => {
       />
        <ScrollView>
  <ImageBackground
-  source={require('../assets/images/ho.jpg')}
+  source={require('../assets/images/hajji.jpg')}
   style={styles.backgroundImage}
-  resizeMode="cover"
->
+  resizeMode="cover">
   <View style={{ height: 180 }} />
 </ImageBackground>
-
-
    {/* Feature Grid */}
         <View style={styles.grid}>
           {features.map((item, index) => (
-            <TouchableOpacity key={index} style={styles.card}>
-              <Image source={item.icon} style={styles.cardIcon} />
-              <Text style={styles.cardText}>{item.title}</Text>
-            </TouchableOpacity>
+            <TouchableOpacity
+  key={index}
+  style={styles.card}
+  onPress={() => {
+    switch (item.title) {
+      case 'Qibla':
+        navigation.navigate('Qibla');
+        break;
+      case 'Salah Times':
+        navigation.navigate('SalahTimes');
+        break;
+      case 'Hajj & Umrah':
+        navigation.navigate('HajjUmrah');
+        break;
+      case 'Live Streaming':
+        navigation.navigate('LiveStreaming');
+        break;
+      case 'Quran':
+        navigation.navigate('Quran');
+        break;
+      case 'Tasbeeh counter':
+        navigation.navigate('TasbeehCounter');
+        break;
+      default:
+        break;
+    }
+  }}
+>
+  <Image source={item.icon} style={styles.cardIcon} />
+  <Text style={styles.cardText}>{item.title}</Text>
+</TouchableOpacity>
+
+            // <TouchableOpacity key={index} style={styles.card}>
+            //   <Image source={item.icon} style={styles.cardIcon} />
+            //   <Text style={styles.cardText}>{item.title}</Text>
+            // </TouchableOpacity>
           ))}
         </View>
-
         {/* Weather Section */}
       <View style={styles.weatherBox}>
   <View style={styles.weatherLeft}>
@@ -85,13 +113,10 @@ useEffect(() => {
   </View>
    
   </View>
-
-
   <Image
     source={require('../assets/images/sunnn.png')}
     style={styles.sunIcon}
   />
-
   <View style={styles.weatherRight}>
      <View style={styles.weatherRight}>
       <View style={{flexDirection:"row"}}>
@@ -99,17 +124,13 @@ useEffect(() => {
     source={require('../assets/images/icons8-sun-30.png')}
     style={styles.redsun}
   />
-  
   <View>
     <Text style={styles.tempText}>31.08°C</Text>
     <Text style={styles.tempText}>clear sky</Text>
   </View>
-  
       </View>
-
     <Text style={styles.locationText}>Makkah al Mukarramah</Text>
   </View>
-  
   </View>
 </View>
 <View style={styles.weatherBox}>
@@ -122,15 +143,11 @@ useEffect(() => {
       style={styles.refreshIcon}
     />
   </View>
-   
   </View>
-
-
   <Image
     source={require('../assets/images/sunnn.png')}
     style={styles.sunIcon}
   />
-
   <View style={styles.weatherRight}>
      <View style={styles.weatherRight}>
       <View style={{flexDirection:"row"}}>
@@ -138,7 +155,6 @@ useEffect(() => {
     source={require('../assets/images/icons8-sun-30.png')}
     style={styles.redsun}
   />
-  
   <View>
     <Text style={styles.tempText}>31.08°C</Text>
     <Text style={styles.tempText}>clear sky</Text>
@@ -174,15 +190,11 @@ useEffect(() => {
     scrollEnabled={false}
   />
 </View>
-
-      </ScrollView>
-
-      
+      </ScrollView> 
       {/* <Button title="Go to Details" onPress={() => navigation.navigate('Details')} /> */}
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -191,7 +203,7 @@ const styles = StyleSheet.create({
   },
    backgroundImage: {
   width: '100%',
-  height: 260,
+  height: 240,
   justifyContent: 'center',
   alignItems: 'center',
   marginBottom: 10,
@@ -270,7 +282,7 @@ const styles = StyleSheet.create({
   flexDirection: 'row',
   alignItems: 'flex-start',
   justifyContent: 'space-between',
-  backgroundColor: '#007cc0',
+  backgroundColor: '#213A7C',
   marginHorizontal: 15,
   padding: 12,
   marginBottom: 10,
