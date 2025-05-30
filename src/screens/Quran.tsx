@@ -1,10 +1,24 @@
 import React from 'react';
-import { ScrollView, Text, View, StyleSheet ,TouchableOpacity,Image,StatusBar} from 'react-native';
+import { ScrollView, Text, View, StyleSheet ,TouchableOpacity,Image,StatusBar,FlatList} from 'react-native';
 import quranJson from '../assets/JsonFile/quranfile.json';
 import { useNavigation } from '@react-navigation/native';
 export default function Quran() {
   const quranData = quranJson.Quran;
      const navigation = useNavigation();
+     const surahList = Object.entries(quranJson.Quran).map(([surahNumber, verses]) => ({
+  surahNumber,
+  verses,
+}));
+      const renderItem = ({ item }: any) => (
+    <View style={styles.surahContainer}>
+      <Text style={styles.surahTitle}>Surah {item.surahNumber}</Text>
+      {item.verses.map((verse: string, index: number) => (
+        <Text key={index} style={styles.verseText}>
+          {index + 1}. {verse.trim()}
+        </Text>
+      ))}
+    </View>
+  );
   return (
     <>
       <StatusBar backgroundColor="#00008B" barStyle="light-content" />
@@ -19,18 +33,17 @@ export default function Quran() {
     </View>
     
    
-    <ScrollView style={styles.container}>
-      {Object.entries(quranData).map(([surahNumber, verses]) => (
-        <View key={surahNumber} style={styles.surahContainer}>
-          <Text style={styles.surahTitle}>Surah {surahNumber}</Text>
-          {(verses as string[]).map((verse, index) => (
-            <Text key={index} style={styles.verseText}>
-              {index + 1}. {verse.trim()}
-            </Text>
-          ))}
-        </View>
-      ))}
-    </ScrollView>
+    {/* Quran Content */}
+      <FlatList
+        data={surahList}
+        keyExtractor={(item) => item.surahNumber}
+        renderItem={renderItem}
+        contentContainerStyle={styles.container}
+        initialNumToRender={5}
+        maxToRenderPerBatch={10}
+        windowSize={21}
+        removeClippedSubviews
+      />
      </>
   );
 }
@@ -64,7 +77,7 @@ const styles = StyleSheet.create({
   backgroundColor: '#0384cc',
   width: '100%',
   paddingVertical: 15,
-  paddingHorizontal: 20,
+  paddingHorizontal: 12,
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',

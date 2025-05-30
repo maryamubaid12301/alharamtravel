@@ -12,7 +12,7 @@ const Header: React.FC<HeaderProps> = ({ title, onLeftPress, onRightPress }) => 
   return (
     <>
      <StatusBar backgroundColor="#00008B" barStyle="light-content" />
-    <LinearGradient colors={['#1A84B8', '#1A84B8']} style={styles.container}>
+    <LinearGradient colors={['#0384cc', '#0384cc']} style={styles.container}>
       <TouchableOpacity onPress={onLeftPress}>
         <Image
           source={require('../assets/images/phonee.png')} // Update path to your image

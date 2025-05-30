@@ -91,19 +91,14 @@ export default function SalahTimes() {
       value={switchStates[item.id]}
       onValueChange={() => toggleSwitch(item.id)}
     />
-
 </View>
-
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-   
     </View>
-    
   </>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -115,7 +110,7 @@ const styles = StyleSheet.create({
   backgroundColor: '#0384cc',
   width: '100%',
   paddingVertical: 15,
-  paddingHorizontal: 20,
+  paddingHorizontal: 12,
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',

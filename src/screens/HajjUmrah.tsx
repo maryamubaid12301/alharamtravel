@@ -8,3 +8,5 @@ export default function HajjUmrah() {
     </View>
   );
 }
+
+working on SalahTime,Quran,tasbeeh,live streamng screens done

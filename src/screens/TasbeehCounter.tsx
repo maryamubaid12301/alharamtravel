@@ -34,9 +34,12 @@ export default function TasbeehCounter() {
  <Text style={styles.count}>{count}</Text>
 
       {/* Clickable Circle */}
-      <TouchableOpacity style={styles.circle} onPress={() => setCount(count + 1)}>
-        <Image source={require('../assets/images/thumbb.jpg')} style={styles.circleImage} />
+      <View style={styles.circle}>
+     <TouchableOpacity style={styles.circle} onPress={() => setCount(count + 1)}>
+        <Image source={require('../assets/images/thumbup.png')} style={styles.circleImage} />
       </TouchableOpacity>
+      </View>
+   
 
       {/* Reset Button */}
       <TouchableOpacity style={styles.resetButton} onPress={() => setCount(0)}>
@@ -61,7 +64,7 @@ const styles = StyleSheet.create({
   backgroundColor: '#0384cc',
   width: '100%',
   paddingVertical: 15,
-  paddingHorizontal: 20,
+  paddingHorizontal: 10,
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -101,18 +104,9 @@ Arrowicon:{
     marginVertical: 25,
     color: '#000',
   },
-  circle: {
-    width: width * 0.4,
-    height: width * 0.4,
-    borderRadius: (width * 0.4) / 2,
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 20,
 
-  },
   circleImage: {
-  height:400,
+  height:'60%',
   width:130,
     resizeMode: 'contain',
   },
@@ -129,8 +123,8 @@ Arrowicon:{
     fontSize: 16,
   },
      backgroundImage: {
-  width: '70%',
-  height: '30%',
+  width: '100%',
+  height: 340,
   justifyContent: 'center',
   alignItems: 'center',
   marginBottom: 10,
@@ -140,5 +134,24 @@ Arrowicon:{
     
     justifyContent:"center",
     alignItems:'center'
-  }
+  },
+  circle: {
+  width: width * 0.3,
+  height: width * 0.3,
+  borderRadius: (width * 0.4) / 2,
+  borderWidth: 6,                  // Bold border
+  borderColor: '#000',             // Black border
+  overflow: 'hidden',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginVertical: 20,
+  backgroundColor: '#fff',         // Optional, makes the border stand out
+},
+
+// circleImage: {
+//   width: '80%',
+//   height: '80%',
+//   resizeMode: 'contain',
+// },
+
 });
