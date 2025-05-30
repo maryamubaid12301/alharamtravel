@@ -67,7 +67,6 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
      
         <Stack.Screen name="Tabs" component={TabNavigator} />
-           <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="Qibla" component={Qibla} />
         <Stack.Screen name="SalahTimes" component={SalahTimes} />
         <Stack.Screen name="HajjUmrah" component={HajjUmrah} />
