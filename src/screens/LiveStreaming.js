@@ -7,10 +7,12 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
-  Image
+  Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Header from '../components/Header';
 const { width } = Dimensions.get('window');
+
 export default function LiveStreaming() {
   const navigation = useNavigation();
 
@@ -19,42 +21,53 @@ export default function LiveStreaming() {
       <StatusBar backgroundColor="#0384cc" barStyle="light-content" />
 
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../assets/images/whitebackarrow.png')} style={styles.Arrowicon} />
-        </TouchableOpacity>
+   <Header
+  title="Live Streaming"
+  onLeftPress={() => navigation.goBack()}
+  leftIcon={require('../assets/images/whitebackarrow.png')}
+  rightIcon={require('../assets/images/whitemesageicon.png')}
+/>
 
-        <View style={styles.headerCenter}>
-          <Text style={styles.headerText}>Live Streaming</Text>
-        </View>
-
-        <Image source={require('../assets/images/whitemesageicon.png')} style={styles.icon} />
-      </View>
 
       {/* Content */}
       <View style={styles.mainView}>
         <View style={styles.liveBlock}>
           <Text style={styles.cityText}>MAKKAH</Text>
-          <Image
-            source={require('../assets/images/streaming.jpg')}
-            style={styles.streamImage}
-            resizeMode="cover"
-          />
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('WebViewScreen', {
+                url: 'https://www.youtube.com/watch?v=nKBA6xp5P_k',
+              })
+            }
+          >
+            <Image
+              source={require('../assets/images/streaming.jpg')}
+              style={styles.streamImage}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.liveBlock}>
           <Text style={styles.cityText}>MADINA</Text>
-          <Image
-            source={require('../assets/images/streaming.jpg')}
-            style={styles.streamImage}
-            resizeMode="cover"
-          />
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('WebViewScreen', {
+                url: 'https://www.youtube.com/watch?v=nKBA6xp5P_k',
+              })
+            }
+          >
+            <Image
+              source={require('../assets/images/streaming.jpg')}
+              style={styles.streamImage}
+              resizeMode="cover"
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -70,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     position: 'relative',
-    marginTop: 40,
+    marginTop: 22,
   },
   headerCenter: {
     position: 'absolute',
@@ -94,11 +107,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   mainView: {
-    marginTop:12,
+    marginTop: 12,
     padding: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical:180
+    paddingVertical: 180,
   },
   liveBlock: {
     marginBottom: 30,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 import HomeScreen from '../screens/HomeScreen';
 import MessagesScreen from '../screens/Messages';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -14,29 +15,33 @@ export default function TabNavigator() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-         backgroundColor: 'lightgray',
-  position: 'absolute',
-  bottom: 0, // moves it slightly above the screen bottom
-  left: 10,
-  right: 10,
-  borderTopLeftRadius: 0,
-  borderTopRightRadius: 0,
-  height: 70,
-  elevation: 5, // for Android shadow
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.1,
-  shadowRadius: 4,
+          backgroundColor: 'gray',
+          position: 'absolute',
+          bottom: 15,
+          left: 10,
+          right: 10,
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+          height: 60,
+          elevation: 5,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
         },
         tabBarLabelStyle: {
           fontSize: 12,
         },
-         tabBarActiveTintColor: 'orange',
-  tabBarInactiveTintColor: 'gray',
+        tabBarBackground: () => (
+  <View style={{ flex: 1, backgroundColor: 'lightgray', borderRadius: 0 }} />
+),
+
+        tabBarActiveTintColor: 'orange',
+        tabBarInactiveTintColor: 'gray',
         tabBarIcon: ({ focused }) => {
           let iconSource;
 
-         if (route.name === 'Home') {
+          if (route.name === 'Home') {
             iconSource = focused
               ? require('../assets/images/homeorange.png')
               : require('../assets/images/homegray.png');
@@ -64,7 +69,7 @@ export default function TabNavigator() {
         },
       })}
     >
-    <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Messages" component={MessagesScreen} />
       <Tab.Screen name="Social" component={SocialScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />

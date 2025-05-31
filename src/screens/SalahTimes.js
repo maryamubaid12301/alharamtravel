@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity,Switch, FlatList, Dimensions,ImageBackground ,StatusBar} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Header from '../components/Header';
 const { width } = Dimensions.get('window');
 
 export default function SalahTimes() {
@@ -39,21 +40,18 @@ export default function SalahTimes() {
      <StatusBar backgroundColor="#00008B" barStyle="light-content" />
     <View style={styles.container}>
       {/* App Header */}
-<View style={styles.header}>
-    <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Image source={require('../assets/images/whitebackarrow.png')} style={styles.Arrowicon} />
-    </TouchableOpacity>
-  <View style={styles.headerCenter}>
-    <Text style={styles.headerText}>Salah Times</Text>
-  </View>
-  <Image source={require('../assets/images/whitemesageicon.png')} style={styles.icon} />
-</View>
+      <Header
+       title="Salah Times"
+       onLeftPress={() => navigation.goBack()}
+       leftIcon={require('../assets/images/whitebackarrow.png')}
+       rightIcon={require('../assets/images/whitemesageicon.png')}
+       />
          
     <ImageBackground
-  source={require('../assets/images/salahtimes.jpg')}
-  style={styles.backgroundImage}
-  resizeMode="cover"
->
+      source={require('../assets/images/salahtimes.jpg')}
+      style={styles.backgroundImage}
+      resizeMode="cover"
+      >
   <View style={styles.topRow}>
    
     <TouchableOpacity onPress={() => console.log('Settings Pressed')}>
@@ -74,7 +72,6 @@ export default function SalahTimes() {
 </ImageBackground>
        <View style={styles.masterRow}>
         <Text style={styles.masterLabel}>Turn on Alarms</Text>
-
         <Switch value={masterSwitch} onValueChange={toggleMasterSwitch} style={styles.switchStle} />
       </View>
       <FlatList
@@ -103,13 +100,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 60,
     backgroundColor: 'lightgray',
   },
  header: {
   backgroundColor: '#0384cc',
   width: '100%',
-  paddingVertical: 15,
+  paddingVertical: 32,
   paddingHorizontal: 12,
   flexDirection: 'row',
   justifyContent: 'space-between',
@@ -126,16 +122,19 @@ headerText: {
   color: '#fff',
   fontSize: 20,
   fontWeight: 'bold',
+     marginTop:10,
 },
 icon: {
   width: 24,
   height: 24,
   resizeMode: 'contain',
+     marginTop:10,
 },
 Arrowicon:{
  width: 35,
   height: 35,
   resizeMode: 'contain',
+     marginTop:10,
 },
 
   backgroundImage: {
