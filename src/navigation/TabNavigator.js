@@ -8,7 +8,6 @@ import ProfileScreen from '../screens/ProfileScreen';
 import SocialScreen from '../screens/SocialScreen';
 
 const Tab = createBottomTabNavigator();
-
 export default function TabNavigator() {
   return (
     <Tab.Navigator
@@ -17,12 +16,12 @@ export default function TabNavigator() {
         tabBarStyle: {
           backgroundColor: 'gray',
           position: 'absolute',
-          bottom: 15,
+          bottom: 20,
           left: 10,
           right: 10,
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
-          height: 60,
+          height: 50,
           elevation: 5,
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 2 },

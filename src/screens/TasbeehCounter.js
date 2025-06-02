@@ -30,39 +30,37 @@ export default function TasbeehCounter() {
         />
 
         {/* Top Half */}
-        <View style={styles.topHalf}>
-          <Image
-            source={require('../assets/images/salah.png')} // replace with your actual logo path
-            style={styles.logo}
-            resizeMode="contain"
-          />
-          <TouchableOpacity
-            style={styles.resetButton}
-            onPress={() => setCount(0)}
-          >
-            <Text style={styles.resetText}>RESET</Text>
-          </TouchableOpacity>
-        </View>
+       <View style={styles.topHalf}>
+  <Image
+    source={require('../assets/images/logo.png')}
+    style={styles.logo}
+    resizeMode="contain"
+  />
+
+  <Text style={styles.count}>{count}</Text>
+
+  <TouchableOpacity style={styles.circle} onPress={() => setCount(count + 1)}>
+    <Image
+      source={require('../assets/images/thumbpresss.png')}
+      style={styles.circleImage}
+    />
+  </TouchableOpacity>
+
+  {/* <TouchableOpacity style={styles.resetButton} onPress={() => setCount(0)}>
+    <Text style={styles.resetText}>RESET</Text>
+  </TouchableOpacity> */}
+</View>
+
 
         {/* Bottom Half with Background Image */}
         <ImageBackground
-          source={require('../assets/images/masjid2.jpg')}
+          source={require('../assets/images/masjid4.png')}
           style={styles.bottomHalf}
           resizeMode="cover"
         >
-          <View style={styles.overlayContent}>
-            <Text style={styles.count}>{count}</Text>
-
-            <TouchableOpacity
-              style={styles.circle}
-              onPress={() => setCount(count + 1)}
-            >
-              <Image
-                source={require('../assets/images/thumbup.png')}
-                style={styles.circleImage}
-              />
-            </TouchableOpacity>
-          </View>
+           <TouchableOpacity style={styles.resetButton} onPress={() => setCount(0)}>
+    <Text style={styles.resetText}>RESET</Text>
+  </TouchableOpacity>
         </ImageBackground>
       </View>
     </>
@@ -74,31 +72,58 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  topHalf: {
-    height: height * 0.4,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  logo: {
-    width: 150,
-    height: 100,
-    marginBottom: 20,
-  },
-  resetButton: {
-    backgroundColor: '#f26522',
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  resetText: {
+ topHalf: {
+  paddingTop: 30,
+  paddingBottom: 20,
+  alignItems: 'center',
+  justifyContent: 'flex-start',  // important: start from top
+  gap: 20,
+ 
+},
+
+logo: {
+  width: 160,
+  height: 100,
+  marginBottom: 20,
+  marginTop: 10, // for spacing below header
+},
+
+count: {
+  fontSize: 48,
+  fontWeight: 'bold',
+  color: '#000',
+  marginBottom: 20,
+},
+
+// circle: {
+//   width: width * 0.3,
+//   height: width * 0.3,
+//   borderRadius: (width * 0.3) / 2,
+//   borderWidth: 6,
+//   borderColor: '#000',
+//   justifyContent: 'center',
+//   alignItems: 'center',
+//   backgroundColor: '#fff',
+//   marginBottom: 20,
+// },
+
+resetButton: {
+  backgroundColor: '#f26522',
+  paddingHorizontal: 40,
+  paddingVertical: 10,
+  borderRadius: 8,
+  marginTop: 0,
+  position:'absolute',
+  top:50
+},
+ resetText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
   },
   bottomHalf: {
     height: height * 0.5,
-    width: '90%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -47,7 +47,10 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#00008B" barStyle="light-content" />
+    <StatusBar backgroundColor="#003366" barStyle="light-content" />
+
+      {/* Status bar background (only for Android) */}
+      {Platform.OS === 'android' && <View style={styles.statusBarBackground} />}
       <Header title="Home" />
 
       <ScrollView>
@@ -171,6 +174,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
+     backgroundColor: '#0384cc',
   },
   grid: {
     flexDirection: 'row',

@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, StatusBar } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-
 const Header = ({
   title,
   onLeftPress,
@@ -21,11 +20,9 @@ const Header = ({
             )}
           </TouchableOpacity>
         </View>
-
         <View style={styles.center}>
           <Text style={styles.title}>{title}</Text>
         </View>
-
         <View style={styles.side}>
           <TouchableOpacity onPress={onRightPress}>
             {rightIcon && (
