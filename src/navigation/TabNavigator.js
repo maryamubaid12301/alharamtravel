@@ -1,12 +1,10 @@
 import React from 'react';
 import { Image, View, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
 import HomeScreen from '../screens/HomeScreen';
 import MessagesScreen from '../screens/Messages';
 import ProfileScreen from '../screens/ProfileScreen';
 import SocialScreen from '../screens/SocialScreen';
-
 const Tab = createBottomTabNavigator();
 export default function TabNavigator() {
   return (
@@ -16,7 +14,7 @@ export default function TabNavigator() {
         tabBarStyle: {
           backgroundColor: 'gray',
           position: 'absolute',
-          bottom: 20,
+          bottom: 0,
           left: 10,
           right: 10,
           borderTopLeftRadius: 0,
