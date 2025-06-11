@@ -26,38 +26,45 @@ const COMPASS_SIZE = width * 0.6;
 
 export default function Qibla() {
   const navigation = useNavigation();
-  const [compassHeading, setCompassHeading] = useState(0);
-  const [qiblaDirection, setQiblaDirection] = useState(0);
+  const [compassHeading, setCompassHeading] = useState(null);
+  const [qiblaDirection, setQiblaDirection] = useState(null);
   const [loading, setLoading] = useState(true);
   const [locationFound, setLocationFound] = useState(false);
+  const [compassReady, setCompassReady] = useState(false);
 
   useEffect(() => {
-    // Start compass updates immediately with higher frequency
-    CompassHeading.start(1, ({ heading }) => {
-      // Normalize the heading to 0-360 range
-      const normalizedHeading = (heading + 360) % 360;
-      setCompassHeading(normalizedHeading);
-    });
+    let compassSubscription = null;
+    let locationWatchId = null;
 
-    let watchId = null;
+    const setupCompass = () => {
+      // Start compass updates with higher frequency
+      CompassHeading.start(1, ({ heading }) => {
+        // Normalize the heading to 0-360 range
+        const normalizedHeading = (heading + 360) % 360;
+        setCompassHeading(normalizedHeading);
+        setCompassReady(true);
+      });
+    };
     
     const getLocation = async () => {
       try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-          {
-            title: "Location Permission",
-            message: "This app needs access to your location to show Qibla direction",
-            buttonNeutral: "Ask Me Later",
-            buttonNegative: "Cancel",
-            buttonPositive: "OK"
-          }
-        );
+        if (Platform.OS === 'android') {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              title: "Location Permission",
+              message: "This app needs access to your location to show Qibla direction",
+              buttonNeutral: "Ask Me Later",
+              buttonNegative: "Cancel",
+              buttonPositive: "OK"
+            }
+          );
 
-        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-          Alert.alert('Error', 'Location permission denied');
-          setLoading(false);
-          return;
+          if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+            Alert.alert('Error', 'Location permission denied');
+            setLoading(false);
+            return;
+          }
         }
 
         // Get initial position
@@ -71,6 +78,7 @@ export default function Qibla() {
           },
           (error) => {
             console.error('Initial position error:', error);
+            Alert.alert('Error', 'Failed to get your location. Please check your GPS settings.');
             setLoading(false);
           },
           {
@@ -81,14 +89,17 @@ export default function Qibla() {
         );
 
         // Start watching position for updates
-        watchId = Geolocation.watchPosition(
+        locationWatchId = Geolocation.watchPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
             const qiblaAngle = calculateQiblaDirection(latitude, longitude);
             setQiblaDirection(qiblaAngle);
             setLocationFound(true);
           },
-          (error) => console.error('Watch position error:', error),
+          (error) => {
+            console.error('Watch position error:', error);
+            Alert.alert('Error', 'Failed to update location. Please check your GPS settings.');
+          },
           {
             enableHighAccuracy: true,
             distanceFilter: 10,
@@ -104,12 +115,16 @@ export default function Qibla() {
       }
     };
 
+    // Start both compass and location services
+    setupCompass();
     getLocation();
 
     return () => {
-      CompassHeading.stop();
-      if (watchId !== null) {
-        Geolocation.clearWatch(watchId);
+      if (compassSubscription) {
+        CompassHeading.stop();
+      }
+      if (locationWatchId !== null) {
+        Geolocation.clearWatch(locationWatchId);
       }
     };
   }, []);
@@ -134,15 +149,17 @@ export default function Qibla() {
       return (qibla + 360) % 360;
     } catch (error) {
       console.error('Qibla calculation error:', error);
-      return 0;
+      return null;
     }
   };
 
-  if (loading && !locationFound) {
+  // Show loading state until both compass and location are ready
+  if (loading || !locationFound || !compassReady || compassHeading === null || qiblaDirection === null) {
     return (
       <View style={styles.centerContainer}>
         <ActivityIndicator size="large" color="#003366" />
         <Text style={styles.loadingText}>Finding Qibla direction...</Text>
+        <Text style={styles.subLoadingText}>Please make sure your GPS is enabled</Text>
       </View>
     );
   }
@@ -275,5 +292,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: '#003366',
+  },
+  subLoadingText: {
+    marginTop: 5,
+    fontSize: 14,
+    color: '#666',
   },
 });

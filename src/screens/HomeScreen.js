@@ -12,11 +12,10 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../components/Header';
-import AppIntroSlider from 'react-native-app-intro-slider';
+// import AppIntroSlider from 'react-native-app-intro-slider';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
-
   const features = [
     { title: 'Qibla', icon: require('../assets/images/compass.jpg') },
     { title: 'Salah Times', icon: require('../assets/images/salah.png') },
@@ -43,7 +42,7 @@ export default function HomeScreen() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [currentSlideIndex]);
+  }, );
 
   return (
     <View style={styles.container}>
@@ -55,7 +54,7 @@ export default function HomeScreen() {
 
       <ScrollView>
         <ImageBackground
-          source={require('../assets/images/hajji.jpg')}
+          source={require('../assets/images/kaabaa.jpg')}
           style={styles.backgroundImage}
           resizeMode="cover"
         >
