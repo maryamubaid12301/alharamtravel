@@ -24,6 +24,13 @@ const KAABA_COORDS = {
 const { width } = Dimensions.get('window');
 const COMPASS_SIZE = width * 0.6;
 
+// Configure geolocation
+Geolocation.setRNConfiguration({
+  skipPermissionRequests: false,
+  authorizationLevel: 'whenInUse',
+  locationProvider: 'auto'
+});
+
 export default function Qibla() {
   const navigation = useNavigation();
   const [compassHeading, setCompassHeading] = useState(null);
@@ -37,15 +44,13 @@ export default function Qibla() {
     let locationWatchId = null;
 
     const setupCompass = () => {
-      // Start compass updates with higher frequency
       CompassHeading.start(1, ({ heading }) => {
-        // Normalize the heading to 0-360 range
         const normalizedHeading = (heading + 360) % 360;
         setCompassHeading(normalizedHeading);
         setCompassReady(true);
       });
     };
-    
+
     const getLocation = async () => {
       try {
         if (Platform.OS === 'android') {
@@ -59,7 +64,6 @@ export default function Qibla() {
               buttonPositive: "OK"
             }
           );
-
           if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
             Alert.alert('Error', 'Location permission denied');
             setLoading(false);
@@ -140,10 +144,9 @@ export default function Qibla() {
       // Calculate the angle using Spherical Law of Cosines
       const numerator = Math.sin(lonK - lon);
       const denominator = (Math.cos(lat) * Math.tan(latK)) - (Math.sin(lat) * Math.cos(lonK - lon));
-      
+
       // Calculate initial bearing
       let qibla = Math.atan2(numerator, denominator);
-      
       // Convert to degrees and normalize
       qibla = (qibla * 180 / Math.PI);
       return (qibla + 360) % 360;

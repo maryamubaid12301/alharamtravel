@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, StatusBar } from 'reac
 import LinearGradient from 'react-native-linear-gradient';
 const Header = ({
   title,
+    logo = null, // image source like require('../assets/images/logo.png')
   onLeftPress,
   onRightPress,
   leftIcon = require('../assets/images/phonee.png'),
@@ -20,8 +21,12 @@ const Header = ({
             )}
           </TouchableOpacity>
         </View>
-        <View style={styles.center}>
-          <Text style={styles.title}>{title}</Text>
+      <View style={styles.center}>
+          {title ? (
+            <Text style={styles.title}>{title}</Text>
+          ) : logo ? (
+            <Image source={logo} style={styles.logo} resizeMode="contain" />
+          ) : null}
         </View>
         <View style={styles.side}>
           <TouchableOpacity onPress={onRightPress}>
@@ -42,16 +47,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 20,
+    paddingVertical: 10,
     justifyContent: 'space-between',
     width: '100%',
-    
   },
   side: {
-    width: 40,
+    width: 32,
     alignItems: 'center',
     justifyContent: 'center',
-    
   },
   center: {
     flex: 1,
@@ -59,13 +62,17 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '500',
-      marginTop:4
+    marginTop: 2
   },
   icon: {
-    width: 24,
-    height: 24,
-    marginTop:1
+    width: 20,
+    height: 20,
+    marginTop: 1
+  },
+  logo: {
+    width: 70,
+    height: 30,
   },
 });
