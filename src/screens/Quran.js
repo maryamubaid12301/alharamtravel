@@ -126,6 +126,7 @@ import {
   ActivityIndicator,
   StatusBar,
 } from 'react-native';
+import { FONTS, SIZES, COLORS } from '../theme/fonts';
 import Header from '../components/Header';
 import { useNavigation } from '@react-navigation/native';
 export default function QuranGrouped() {
@@ -146,7 +147,6 @@ export default function QuranGrouped() {
         setLoading(false);
       });
   }, []);
-
   const groupBySurah = (ayahs) => {
     const surahMap = {};
     ayahs.forEach((ayah) => {
@@ -167,7 +167,6 @@ export default function QuranGrouped() {
   // Concatenate all Ayahs
   const fullArabic = item.ayahs.map(a => a.aya_text_ar).join(' ');
   const fullEnglish = item.ayahs.map(a => a.aya_text_en).join(' ');
-
   return (
     <View style={styles.surahContainer}>
       <Text style={styles.surahTitle}>
@@ -223,22 +222,27 @@ const styles = StyleSheet.create({
   },
   surahTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     marginBottom: 10,
     color: '#1e3d59',
+    fontFamily:FONTS.style,
   },
   verseText: {
-    fontSize: 85,
+    fontSize:SIZES.x2xLarge,
     marginBottom: 8,
     lineHeight: 24,
     color: '#333',
+    fontFamily: FONTS.style,
   },
   arabicText:{
-     fontSize: 35,
+    //  fontSize: 35,
     marginBottom: 12,
     lineHeight: 54,
     color: '#333',
     justifyContent:'center',
-    textAlign:'center'
+    textAlign:'center',
+    // color: COLORS.background,
+    fontSize: SIZES.xxxxLarge,
+    fontFamily: FONTS.style,
   }
 });

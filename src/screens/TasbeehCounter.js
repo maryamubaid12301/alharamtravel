@@ -10,6 +10,7 @@ import {
   ImageBackground,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { FONTS, SIZES, COLORS } from '../theme/fonts';
 import Header from '../components/Header';
 const { width, height } = Dimensions.get('window');
 export default function TasbeehCounter() {
@@ -59,8 +60,6 @@ const styles = StyleSheet.create({
 imageBackground: {
   flex: 1,
   width: '100%',
-  height:976,
-  
 },
 topHalf: {
   flex: 1,
@@ -75,9 +74,9 @@ logo: {
 },
 count: {
   fontSize: 48,
-  fontWeight: 'bold',
   color: '#000',
   paddingVertical: 45,
+  fontFamily: 'PlayfairDisplay',
 },
 resetButton: {
   backgroundColor: '#f26522',
@@ -89,8 +88,8 @@ resetButton: {
 
 resetText: {
   color: '#fff',
-  fontWeight: 'bold',
   fontSize: 16,
+  fontFamily: 'PlayfairDisplay',
 },
 circle: {
   width: width * 0.3,
@@ -112,6 +111,6 @@ logowrapper:{
   justifyContent:'center',
   alignContent:'center',
   alignItems:'center',
-  paddingTop:40
+  paddingTop:40,
 }
 });

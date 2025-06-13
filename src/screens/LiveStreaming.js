@@ -10,16 +10,14 @@ import {
   Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { FONTS, SIZES, COLORS } from '../theme/fonts';
 import Header from '../components/Header';
 const { width } = Dimensions.get('window');
-
 export default function LiveStreaming() {
   const navigation = useNavigation();
-
   return (
     <ScrollView style={styles.container}>
       <StatusBar backgroundColor="#0384cc" barStyle="light-content" />
-
       {/* Header */}
    <Header
   title="Live Streaming"
@@ -27,8 +25,6 @@ export default function LiveStreaming() {
   leftIcon={require('../assets/images/whitebackarrow.png')}
   rightIcon={require('../assets/images/whitemesageicon.png')}
 />
-
-
       {/* Content */}
       <View style={styles.mainView}>
         <View style={styles.liveBlock}>
@@ -38,8 +34,7 @@ export default function LiveStreaming() {
               navigation.navigate('WebViewScreen', {
                 url: 'https://www.youtube.com/watch?v=nKBA6xp5P_k',
               })
-            }
-          >
+            } >
             <Image
               source={require('../assets/images/streaming.jpg')}
               style={styles.streamImage}
@@ -47,7 +42,6 @@ export default function LiveStreaming() {
             />
           </TouchableOpacity>
         </View>
-
         <View style={styles.liveBlock}>
           <Text style={styles.cityText}>MADINA</Text>
           <TouchableOpacity
@@ -55,8 +49,7 @@ export default function LiveStreaming() {
               navigation.navigate('WebViewScreen', {
                 url: 'https://www.youtube.com/watch?v=nKBA6xp5P_k',
               })
-            }
-          >
+            } >
             <Image
               source={require('../assets/images/streaming.jpg')}
               style={styles.streamImage}
@@ -68,7 +61,6 @@ export default function LiveStreaming() {
     </ScrollView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -119,10 +111,10 @@ const styles = StyleSheet.create({
   },
   cityText: {
     color: 'white',
-    fontSize: 22,
-    fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+    fontFamily: 'PlayfairDisplay',
+    fontSize: SIZES.medium,
   },
   streamImage: {
     width: width * 0.6,

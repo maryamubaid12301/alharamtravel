@@ -22,7 +22,6 @@ export default function HomeScreen() {
   const[currentDate,setCurrentDate]=useState('')
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const sliderRef = useRef(null);
-
 useEffect(() => {
   const updateDateTime = () => {
     const now = new Date();
@@ -236,25 +235,10 @@ const styles = StyleSheet.create({
     fontSize: SIZES.medium,
     textAlign: 'center',
     color: COLORS.text,
-    fontFamily: FONTS.bold,
+    fontFamily: FONTS.style,
   },
   weatherBox: {
-    // flexDirection: 'row',
-    // backgroundColor: COLORS.blue,
-    // margin: 8,
-    // marginBottom: 5,
-    // padding: 15,
-    // borderRadius: 10,
-    // elevation: 3,
-    // shadowColor: COLORS.text,
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
-    // paddingHorizontal:40
-     // height: '7%',
     flexDirection: 'row',
-    // alignItems: 'flex-start',
-    // justifyContent: 'space-between',
     backgroundColor: '#213A7C',
     marginHorizontal: 10,
     padding: 8,
@@ -266,12 +250,10 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-start',
   },
   dateText: {
-    
     lineHeight: 12,
     fontSize: SIZES.medium,
     color: COLORS.background,
-    fontFamily: FONTS.regular,
-    // marginBottom: 5,
+    fontFamily: FONTS.style,
   },
   timeRow: {
      flexDirection: 'row',
@@ -304,17 +286,16 @@ const styles = StyleSheet.create({
     height: 25,
     marginRight: 12,
     marginTop: 8,
-
   },
   tempText: {
     fontSize: SIZES.large,
     color: COLORS.background,
-    fontFamily: FONTS.medium,
+    fontFamily: FONTS.style,
   },
   locationText: {
     fontSize: SIZES.medium,
     color: COLORS.background,
-    fontFamily: FONTS.regular,
+    fontFamily: FONTS.style,
     position: 'absolute',
   },
   statusBarBackground: {

@@ -2,21 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Vibration, View, Text, StyleSheet, Image, TouchableOpacity,
   Switch, FlatList, Dimensions, ImageBackground, StatusBar, Modal,
-  Animated, PanResponder, Platform
+  Animated, PanResponder, Platform, AppState
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SlideButton from 'rn-slide-button';
 import notifee, { EventType, TriggerType, AndroidImportance } from '@notifee/react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../components/Header';
 import { FONTS, SIZES, COLORS } from '../theme/fonts';
-
 const { width } = Dimensions.get('window');
+const LONG_VIBRATION_PATTERN = [0, 1000, 500, 1000, 500, 1000];
 
 export default function SalahTimes() {
   const navigation = useNavigation();
-  const LONG_VIBRATION_PATTERN = [0, 1000, 500, 1000, 500, 1000];
   const vibrationIntervalRef = useRef(null);
   const [isAlarmTriggered, setIsAlarmTriggered] = useState(false);
   const [lastTriggered, setLastTriggered] = useState({});
@@ -38,6 +38,40 @@ export default function SalahTimes() {
     { id: '5', name: 'Isha', time: '05:22 PM', dateObj: new Date() },
   ]);
 
+  // Load saved prayer times when component mounts
+  useEffect(() => {
+    loadSavedPrayerTimes();
+  }, []);
+
+  // Save prayer times whenever they change
+  useEffect(() => {
+    savePrayerTimes();
+  }, [namazList]);
+
+  const loadSavedPrayerTimes = async () => {
+    try {
+      const savedTimes = await AsyncStorage.getItem('prayerTimes');
+      if (savedTimes) {
+        const parsedTimes = JSON.parse(savedTimes);
+        // Convert string dates back to Date objects
+        const updatedTimes = parsedTimes.map(prayer => ({
+          ...prayer,
+          dateObj: new Date(prayer.dateObj)
+        }));
+        setNamazList(updatedTimes);
+      }
+    } catch (error) {
+      console.error('Error loading prayer times:', error);
+    }
+  };
+
+  const savePrayerTimes = async () => {
+    try {
+      await AsyncStorage.setItem('prayerTimes', JSON.stringify(namazList));
+    } catch (error) {
+      console.error('Error saving prayer times:', error);
+    }
+  };
   // Initialize prayer times as Date objects
   useEffect(() => {
     const updatedList = namazList.map(prayer => {
@@ -58,7 +92,6 @@ export default function SalahTimes() {
     });
     setNamazList(updatedList);
   }, []);
-
   const panResponder = useRef(
     PanResponder.create({
       onStartShouldSetPanResponder: () => true,
@@ -116,10 +149,8 @@ export default function SalahTimes() {
         }
       });
     }, 1000);
-
     return () => clearInterval(interval);
   }, [enabledPrayers, lastTriggered]);
-
   const convertTo24Hour = (time12h) => {
     const [time, meridiem] = time12h.split(' ');
     let [hours, minutes] = time.split(':');
@@ -166,6 +197,10 @@ export default function SalahTimes() {
         return prayer;
       });
       setNamazList(updatedList);
+      // Schedule new notifications after time change
+      if (masterSwitch) {
+        scheduleNotifications();
+      }
     }
   };
 
@@ -175,15 +210,13 @@ export default function SalahTimes() {
     setLastTriggered(prev => ({ ...prev, [prayerName]: today }));
     setIsModalVisible(true);
 
-    vibrationIntervalRef.current = setInterval(() => {
-      Vibration.vibrate(1000);
-    }, 1200);
+    // Start vibration pattern
+    Vibration.vibrate(LONG_VIBRATION_PATTERN, true);
   };
 
   const stopAlarm = () => {
     setIsAlarmTriggered(false);
     setIsModalVisible(false);
-    clearInterval(vibrationIntervalRef.current);
     Vibration.cancel();
   };
 
@@ -195,11 +228,122 @@ export default function SalahTimes() {
       updatedSwitches[item.id] = newState;
     });
     setSwitchStates(updatedSwitches);
+    
+    // Cancel or schedule notifications based on master switch
+    if (newState) {
+      scheduleNotifications();
+    } else {
+      notifee.cancelAllNotifications();
+    }
   };
 
   const toggleSwitch = (id) => {
-    setSwitchStates((prev) => ({ ...prev, [id]: !prev[id] }));
+    const newSwitchStates = { ...switchStates, [id]: !switchStates[id] };
+    setSwitchStates(newSwitchStates);
+    
+    // Update notifications when individual prayer switch is toggled
+    if (masterSwitch) {
+      scheduleNotifications();
+    }
   };
+
+  // Handle notification events
+  useEffect(() => {
+    const unsubscribe = notifee.onForegroundEvent(({ type, detail }) => {
+      if (type === EventType.PRESS) {
+        // When notification is pressed, navigate to SalahTimes screen
+        navigation.navigate('SalahTimes');
+      }
+    });
+
+    // Handle background events
+    notifee.onBackgroundEvent(async ({ type, detail }) => {
+      if (type === EventType.TRIGGER_NOTIFICATION_CREATED) {
+        // Start vibration when notification is triggered
+        Vibration.vibrate(LONG_VIBRATION_PATTERN, true);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  // Schedule notifications for all enabled prayers
+  const scheduleNotifications = async () => {
+    // Cancel all existing notifications first
+    await notifee.cancelAllNotifications();
+
+    const now = new Date();
+    enabledPrayers.forEach(async (prayer) => {
+      const [time, meridiem] = prayer.time.split(' ');
+      const [hours, minutes] = time.split(':');
+      let hour = parseInt(hours);
+      
+      if (meridiem === 'PM' && hour !== 12) {
+        hour += 12;
+      } else if (meridiem === 'AM' && hour === 12) {
+        hour = 0;
+      }
+
+      const triggerDate = new Date();
+      triggerDate.setHours(hour);
+      triggerDate.setMinutes(parseInt(minutes));
+      triggerDate.setSeconds(0);
+
+      // If the time has already passed today, schedule for tomorrow
+      if (triggerDate <= now) {
+        triggerDate.setDate(triggerDate.getDate() + 1);
+      }
+
+      await notifee.createTriggerNotification(
+        {
+          title: 'Prayer Time',
+          body: `It's time for ${prayer.name} prayer`,
+          android: {
+            channelId: 'prayer-times',
+            importance: AndroidImportance.HIGH,
+            pressAction: {
+              id: 'default',
+            },
+            vibration: true,
+            vibrationPattern: LONG_VIBRATION_PATTERN,
+          },
+          ios: {
+            sound: 'default',
+          },
+        },
+        {
+          type: TriggerType.TIMESTAMP,
+          timestamp: triggerDate.getTime(),
+          repeatFrequency: TriggerType.DAILY,
+        }
+      );
+    });
+  };
+
+  // Create notification channel for Android
+  const createNotificationChannel = async () => {
+    if (Platform.OS === 'android') {
+      await notifee.createChannel({
+        id: 'prayer-times',
+        name: 'Prayer Times',
+        importance: AndroidImportance.HIGH,
+        vibration: true,
+        vibrationPattern: LONG_VIBRATION_PATTERN,
+        sound: 'default',
+      });
+    }
+  };
+
+  // Update notifications when prayer times or switch states change
+  useEffect(() => {
+    if (masterSwitch) {
+      scheduleNotifications();
+    } else {
+      notifee.cancelAllNotifications();
+    }
+  }, [namazList, switchStates, masterSwitch]);
 
   return (
     <>
@@ -235,7 +379,6 @@ export default function SalahTimes() {
             <Text style={styles.locationText}>Lahore</Text>
           </View>
         </ImageBackground>
-
         <View style={styles.masterRow}>
           <Text style={styles.masterLabel}>Turn on Alarms</Text>
           <Switch value={masterSwitch} onValueChange={toggleMasterSwitch} style={styles.switchStle} />
@@ -367,8 +510,14 @@ const styles = StyleSheet.create({
   },
   timeStyle: {
     color: COLORS.background,
-    fontSize: SIZES.large,
-    fontFamily: FONTS.semiBold,
+    // fontSize: SIZES.large,
+    // fontFamily: FONTS.style,
+
+
+    fontSize: SIZES.medium,
+    // textAlign: 'center',
+    // color: COLORS.text,
+    fontFamily: FONTS.style,
   },
   settingsIcon: {
     width: 24,
@@ -391,7 +540,7 @@ const styles = StyleSheet.create({
   locationText: {
     color: COLORS.background,
     fontSize: SIZES.medium,
-    fontFamily: FONTS.semiBold,
+    fontFamily: FONTS.style,
   },
   masterRow: {
     flexDirection: 'row',
@@ -402,7 +551,7 @@ const styles = StyleSheet.create({
   },
   masterLabel: {
     fontSize: SIZES.xxLarge,
-    fontFamily: FONTS.bold,
+    fontFamily: FONTS.style,
     position: 'absolute',
     right: 36,
   },
@@ -426,7 +575,7 @@ const styles = StyleSheet.create({
   },
   namazName: {
     fontSize: SIZES.large,
-    fontFamily: FONTS.semiBold,
+    fontFamily: FONTS.style,
     color: COLORS.text,
   },
   namazTime: {

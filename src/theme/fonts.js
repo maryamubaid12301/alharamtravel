@@ -4,8 +4,8 @@ export const FONTS = {
   light: 'Poppins-Light',
   bold: 'Poppins-Bold',
   semiBold: 'Poppins-SemiBold',
+  style:'PlayfairDisplay'
 };
-
 export const SIZES = {
   xSmall: 10,
   small: 12,
@@ -15,8 +15,8 @@ export const SIZES = {
   xxLarge: 20,
   xxxLarge: 24,
   xxxxLarge: 32,
+  x2xLarge:85,
 };
-
 export const COLORS = {
   primary: '#0384cc',
   secondary: '#003366',

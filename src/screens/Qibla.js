@@ -70,7 +70,6 @@ export default function Qibla() {
             return;
           }
         }
-
         // Get initial position
         Geolocation.getCurrentPosition(
           (position) => {
@@ -91,7 +90,6 @@ export default function Qibla() {
             maximumAge: 10000
           }
         );
-
         // Start watching position for updates
         locationWatchId = Geolocation.watchPosition(
           (position) => {
@@ -118,11 +116,9 @@ export default function Qibla() {
         setLoading(false);
       }
     };
-
     // Start both compass and location services
     setupCompass();
     getLocation();
-
     return () => {
       if (compassSubscription) {
         CompassHeading.stop();
@@ -132,7 +128,6 @@ export default function Qibla() {
       }
     };
   }, []);
-
   const calculateQiblaDirection = (latitude, longitude) => {
     try {
       // Convert coordinates to radians
@@ -140,11 +135,9 @@ export default function Qibla() {
       const lonK = (KAABA_COORDS.longitude * Math.PI) / 180;
       const lat = (latitude * Math.PI) / 180;
       const lon = (longitude * Math.PI) / 180;
-
       // Calculate the angle using Spherical Law of Cosines
       const numerator = Math.sin(lonK - lon);
       const denominator = (Math.cos(lat) * Math.tan(latK)) - (Math.sin(lat) * Math.cos(lonK - lon));
-
       // Calculate initial bearing
       let qibla = Math.atan2(numerator, denominator);
       // Convert to degrees and normalize
@@ -166,17 +159,14 @@ export default function Qibla() {
       </View>
     );
   }
-
   // Calculate the rotation for the compass
   const compassRotation = {
     transform: [{ rotate: `${-compassHeading}deg` }]
   };
-
   // Calculate the rotation for the Qibla pointer
   const kaabaRotation = {
     transform: [{ rotate: `${(qiblaDirection - compassHeading + 270)}deg` }]
   };
-
   return (
     <View style={styles.container}>
       <Header
@@ -188,8 +178,7 @@ export default function Qibla() {
       <ImageBackground
         source={require('../assets/images/kaababack.jpg')}
         style={styles.backgroundImage}
-        resizeMode="cover"
-      >
+        resizeMode="cover" >
         <View style={styles.overlay}>
           <View style={styles.content}>
             <View style={styles.compassWrapper}>
@@ -217,7 +206,6 @@ export default function Qibla() {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
